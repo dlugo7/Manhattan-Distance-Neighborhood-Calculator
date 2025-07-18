@@ -1,34 +1,29 @@
 # Manhattan Distance Neighborhood Calculator
 
-A clean, interview-ready solution for calculating Manhattan distance neighborhoods in 2D grids. This project provides two distinct approaches perfect for technical interviews.
+A clean, solution for calculating Manhattan distance neighborhoods in 2D grids. This project provides two distinct approaches.
 
-## 🎯 Two-Tier Interview Structure
+## 🎯 Project Structure snd Guidelines
 
 ### 1. **Core Algorithm** (`interview_solution.py`)
-- **Purpose**: Pure algorithm implementation with test cases
-- **Perfect for**: Algorithm-focused interviews
-- **Features**: Clean code, hardcoded test cases, no GUI complexity
+- **Purpose**: Algorithm implementation with test cases
 - **Run**: `python interview_solution.py`
 
 ### 2. **Visual Demonstration** (`gui_demo.py`)
 - **Purpose**: Professional GUI with interactive visualization
-- **Perfect for**: Full-stack skill demonstration
 - **Features**: Dark theme, real-time updates, custom grid creation
 - **Run**: `python gui_demo.py`
 
 ## 🚀 Quick Start
 
-### Algorithm Interview Mode
+### Algorithm Showcase
 ```bash
 python interview_solution.py
 ```
-**Perfect for**: Shows core algorithm implementation without distractions
 
-### Visual Demo Mode
+### Visual GUI Showcase
 ```bash
 python gui_demo.py
 ```
-**Perfect for**: Demonstrates advanced development skills
 
 ## 📋 Problem Statement
 
@@ -54,7 +49,6 @@ def calculate_manhattan_neighborhood(grid: List[List[int]], n: int) -> int:
     Time Complexity: O(P × N²) where P = positive cells
     Space Complexity: O(N²) for neighborhood storage
     """
-    # Implementation details...
 ```
 
 ## 🎨 Visual Demo Features
@@ -81,39 +75,6 @@ The interview solution includes comprehensive test cases:
 6. **Large N** - N larger than grid dimensions
 7. **No Positive Cells** - Empty grid handling
 
-## 🎯 Interview Advantages
-
-### For Algorithm Questions
-- **Direct access** to core implementation
-- **Clean, readable code** without GUI complexity
-- **Comprehensive test cases** with expected results
-- **Performance metrics** and complexity analysis
-- **Step-by-step output** for verification
-
-### For Full-Stack Questions
-- **Professional GUI** with modern design
-- **Real-time interactivity** and updates
-- **Custom grid creation** with validation
-- **Export capabilities** for presentations
-- **Clean architecture** with separation of concerns
-
-## 🔍 Code Navigation
-
-### Algorithm Focus
-```python
-# In interview_solution.py
-find_positive_cells()              # Line ~20
-calculate_manhattan_neighborhood() # Line ~30
-run_test_case()                   # Line ~70
-```
-
-### GUI Components
-```python
-# In gui_demo.py
-NeighborhoodCalculator            # Line ~15
-ModernNeighborhoodGUI            # Line ~60
-CustomGridDialog                 # Line ~400
-```
 
 ## 📈 Performance
 
@@ -163,19 +124,14 @@ Computation time: 0.145ms
 Expected: 13 | Got: 13 | ✅ PASS
 ```
 
-### GUI Mode Features
-- **Interactive visualization** with immediate feedback
-- **Custom grid creation** with drag-and-drop values
-- **Real-time N adjustment** with live updates
-- **Professional presentation** quality
 
-## 🏆 Interview Ready
+## 🏆 Code Structure
 
 This structure provides:
 - **Clean separation** of algorithm vs. visualization
 - **No complexity overhead** when focusing on core logic
-- **Professional presentation** when showcasing skills
 - **Comprehensive test coverage** for validation
 - **Interview-friendly** code organization
 
-Perfect for demonstrating both algorithmic thinking and full-stack development capabilities! 
+Thanks!
+- Daniel
