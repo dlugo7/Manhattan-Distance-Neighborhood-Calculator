@@ -1,23 +1,16 @@
-#!/usr/bin/env python3
 """
 Manhattan Distance Neighborhood Calculator
 ==========================================
 
-Interview Solution: Core Algorithm Implementation
+Problem: Calculate the number of cells within Manhattan distance N of any positive values in a 2D grid.
 
-This file contains the complete solution to the Manhattan distance neighborhood
-calculation problem as specified in the coding challenge PDF.
-
-Problem: Calculate the number of cells within Manhattan distance N of any
-positive values in a 2D grid.
-
-Author: Interview Candidate
-Date: 2024
+Author: Daniel Lugo
+Date: July 2025
 """
 
-from typing import List, Set, Tuple
+from typing import List, Tuple
+from collections import deque
 import time
-
 
 def find_positive_cells(grid: List[List[int]]) -> List[Tuple[int, int]]:
     """Find all cells containing positive values"""
@@ -27,6 +20,49 @@ def find_positive_cells(grid: List[List[int]]) -> List[Tuple[int, int]]:
             if grid[row][col] > 0:
                 positive_cells.append((row, col))
     return positive_cells
+
+def bfs_manhattan_neighborhood(grid: List[List[int]], n: int) -> int:
+    """
+    Version using BFS to calculate the number of unique cells within
+    Manhattan distance N of any positive cell in the grid.
+
+    Args:
+        grid: 2D list representing the grid
+        n: Manhattan distance threshold (N >= 0)
+
+    Returns:
+        Number of unique cells in the neighborhood
+    """
+    # Input validation
+    if not grid or not grid[0] or n < 0:
+        return 0
+
+    rows, cols = len(grid), len(grid[0])
+    visited = set()
+    queue = deque()
+
+    # Seed BFS with all positive cells
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] > 0:
+                visited.add((r, c))
+                queue.append(((r, c), 0))
+
+    while queue:
+        (r, c), dist = queue.popleft()
+        if dist == n:
+            continue
+
+        # dr, dc = delta row, delta column
+        # nr, nc = new row, new column
+        # r, c = current row, current column
+        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and (nr, nc) not in visited:
+                visited.add((nr, nc))
+                queue.append(((nr, nc), dist + 1))
+
+    return len(visited)
 
 
 def calculate_manhattan_neighborhood(grid: List[List[int]], n: int) -> int:
@@ -72,7 +108,6 @@ def calculate_manhattan_neighborhood(grid: List[List[int]], n: int) -> int:
     
     return len(all_neighborhoods)
 
-
 def print_grid(grid: List[List[int]], title: str = "Grid"):
     """Print a formatted grid for visualization"""
     print(f"\n{title}:")
@@ -84,15 +119,12 @@ def print_grid(grid: List[List[int]], title: str = "Grid"):
         print()
     print("-" * (len(grid[0]) * 4 + 1))
 
-
 def run_test_case(test_name: str, grid: List[List[int]], n: int, expected: int = None):
     """Run a single test case and display results"""
-    print(f"\n{'='*60}")
     print(f"TEST CASE: {test_name}")
-    print(f"{'='*60}")
     
     # Display the grid
-    print_grid(grid)
+    # print_grid(grid)
     
     # Find positive cells
     positive_cells = find_positive_cells(grid)
@@ -100,12 +132,14 @@ def run_test_case(test_name: str, grid: List[List[int]], n: int, expected: int =
     print(f"Manhattan distance N: {n}")
     
     # Calculate result
-    start_time = time.time()
-    result = calculate_manhattan_neighborhood(grid, n)
-    end_time = time.time()
+    # start_time = time.time()
+    result = bfs_manhattan_neighborhood(grid, n) 
+    # result = calculate_manhattan_neighborhood(grid, n)
+
+    # end_time = time.time()
     
     print(f"\nRESULT: {result} cells in neighborhood")
-    print(f"Computation time: {(end_time - start_time)*1000:.3f}ms")
+    # print(f"Computation time: {(end_time - start_time)*1000:.3f}ms")
     
     # Check expected result if provided
     if expected is not None:
@@ -114,16 +148,11 @@ def run_test_case(test_name: str, grid: List[List[int]], n: int, expected: int =
     
     return result
 
-
 def main():
     """Main function demonstrating the algorithm with test cases"""
     print("Manhattan Distance Neighborhood Calculator")
-    print("Interview Solution - Core Algorithm Implementation")
-    print("\nProblem: Calculate unique cells within Manhattan distance N of positive values")
-    print("Formula: Manhattan distance = |x1-x2| + |y1-y2|")
-    
+
     # Test Case 1: Basic example from PDF
-    print("\n" + "="*80)
     print("RUNNING TEST CASES")
     print("="*80)
     
@@ -184,23 +213,5 @@ def main():
     ]
     run_test_case("No Positive Cells (N=2)", grid7, 2, 0)
     
-    print("\n" + "="*80)
-    print("ALGORITHM ANALYSIS")
-    print("="*80)
-    print("Time Complexity: O(P × N²) where P = number of positive cells")
-    print("Space Complexity: O(N²) for storing neighborhood coordinates")
-    print("Key Features:")
-    print("  • Handles overlapping neighborhoods (no double counting)")
-    print("  • Boundary checking for grid edges")
-    print("  • Efficient set operations for duplicate removal")
-    print("  • Works with any grid size and N value")
-    
-    print("\n" + "="*80)
-    print("INTERVIEW COMPLETE")
-    print("="*80)
-    print("Core algorithm successfully demonstrated with multiple test cases.")
-    print("Ready for technical discussion and code review.")
-
-
 if __name__ == "__main__":
     main() 

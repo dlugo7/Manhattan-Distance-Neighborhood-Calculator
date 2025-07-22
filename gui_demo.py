@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 """
 Manhattan Distance Neighborhood Calculator - GUI Demo
 ====================================================
 
-Visual demonstration of the Manhattan distance neighborhood calculation
-with professional dark theme interface.
+Visual demonstration of the Manhattan distance neighborhood calculation.
 
 Run: python gui_demo.py
+
+Author: Daniel Lugo
+Date: July 2025
 """
 
 import tkinter as tk
@@ -15,7 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.colors import ListedColormap
 import numpy as np
-from typing import List, Dict, Any, Set, Tuple
+from typing import List, Dict, Any, Tuple
+from collections import deque
 import time
 import random
 
@@ -65,9 +67,62 @@ class NeighborhoodCalculator:
             'computation_time': time.time() - start_time
         }
 
+    def bfs_manhattan_neighborhood(self, grid: List[List[int]], n: int) -> Dict[str, Any]:
+        """
+        BFS-based method to calculate Manhattan neighborhood of all positive cells.
 
-class ModernNeighborhoodGUI:
-    """Modern GUI for Manhattan Distance Neighborhood Calculator"""
+        Returns:
+            Dictionary containing:
+                - count: number of unique cells within distance
+                - neighborhood_cells: set of (row, col) positions in the neighborhood
+                - positive_cells: list of (row, col) of positive value cells
+                - computation_time: runtime in seconds
+        """
+        start_time = time.time()
+
+        rows, cols = len(grid), len(grid[0])
+        visited = set()
+        queue = deque()
+        positive_cells = []
+
+        # Seed the queue with all positive cells
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] > 0:
+                    visited.add((r, c))
+                    queue.append(((r, c), 0))
+                    positive_cells.append((r, c))
+
+        if not positive_cells:
+            return {
+                'count': 0,
+                'neighborhood_cells': set(),
+                'positive_cells': [],
+                'computation_time': time.time() - start_time
+            }
+
+        # Perform BFS to find all reachable cells within distance n
+        while queue:
+            (r, c), dist = queue.popleft()
+            if dist == n:
+                continue
+
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and (nr, nc) not in visited:
+                    visited.add((nr, nc))
+                    queue.append(((nr, nc), dist + 1))
+
+        return {
+            'count': len(visited),
+            'neighborhood_cells': visited,
+            'positive_cells': positive_cells,
+            'computation_time': time.time() - start_time
+        }
+
+
+class NeighborhoodGUI:
+    """GUI for Manhattan Distance Neighborhood Calculator"""
     
     def __init__(self, root):
         self.root = root
@@ -117,7 +172,6 @@ class ModernNeighborhoodGUI:
         self.root.focus_set()
         
     def create_styles(self):
-        """Create modern dark theme styling"""
         style = ttk.Style()
         
         try:
@@ -126,7 +180,7 @@ class ModernNeighborhoodGUI:
             pass
         
         # Button styling
-        style.configure('Modern.TButton',
+        style.configure('Dark.TButton',
                        background=self.colors['secondary'],
                        foreground=self.colors['text'],
                        borderwidth=1,
@@ -135,7 +189,7 @@ class ModernNeighborhoodGUI:
                        relief='flat',
                        font=('Helvetica', 10, 'bold'))
         
-        style.map('Modern.TButton',
+        style.map('Dark.TButton',
                  background=[('active', self.colors['accent']),
                             ('pressed', self.colors['primary'])],
                  foreground=[('active', self.colors['text']),
@@ -199,7 +253,7 @@ class ModernNeighborhoodGUI:
         nav_frame.pack(pady=15)
         
         self.prev_button = ttk.Button(nav_frame, text="◀ Previous", 
-                                     style='Modern.TButton',
+                                     style='Dark.TButton',
                                      command=self.previous_example)
         self.prev_button.pack(side='left', padx=10)
         
@@ -208,11 +262,11 @@ class ModernNeighborhoodGUI:
         self.example_info.pack(side='left', padx=20)
         
         self.next_button = ttk.Button(nav_frame, text="Next ▶",
-                                     style='Modern.TButton',
+                                     style='Dark.TButton',
                                      command=self.next_example)
         self.next_button.pack(side='left', padx=10)
         
-        ttk.Button(nav_frame, text="Save Image", style='Modern.TButton',
+        ttk.Button(nav_frame, text="Save Image", style='Dark.TButton',
                   command=self.save_image).pack(side='left', padx=10)
         
         # Settings
@@ -246,7 +300,7 @@ class ModernNeighborhoodGUI:
         self.n_entry.pack(side='left', padx=5)
         self.n_entry.bind('<Return>', self.update_n_value)
         
-        ttk.Button(n_control, text="Update", style='Modern.TButton',
+        ttk.Button(n_control, text="Update", style='Dark.TButton',
                   command=self.update_n_value).pack(side='left', padx=5)
         
         # Custom grid
@@ -254,7 +308,7 @@ class ModernNeighborhoodGUI:
         custom_frame.pack(side='left', padx=20)
         
         ttk.Label(custom_frame, text="Custom Grid:", style='Info.TLabel').pack(anchor='w')
-        ttk.Button(custom_frame, text="Create Custom Grid", style='Modern.TButton',
+        ttk.Button(custom_frame, text="Create Custom Grid", style='Dark.TButton',
                   command=self.open_custom_grid).pack(anchor='w', pady=5)
         
         # Display options
@@ -373,7 +427,8 @@ class ModernNeighborhoodGUI:
         current_n = int(self.n_var.get())
         
         # Calculate result
-        result = self.calculator.calculate_manhattan_neighborhood(example['grid'], current_n)
+        result = self.calculator.bfs_manhattan_neighborhood(example['grid'], current_n)
+        # result = self.calculator.calculate_manhattan_neighborhood(example['grid'], current_n)
         example['result'] = result
         example['n'] = current_n
         
@@ -660,9 +715,8 @@ class CustomGridDialog:
 
 
 def main():
-    """Main function"""
     root = tk.Tk()
-    app = ModernNeighborhoodGUI(root)
+    app = NeighborhoodGUI(root)
     
     def on_closing():
         root.quit()
