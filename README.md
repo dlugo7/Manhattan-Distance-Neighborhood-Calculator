@@ -73,7 +73,7 @@ The interview solution includes comprehensive test cases:
 7. **No Positive Cells** - Empty grid handling
 
 
-## 🛠️ Dependencies
+## Dependencies
 
 **For Algorithm Mode** (`interview_solution.py`):
 - Python 3.6+ (built-in modules only)
@@ -84,7 +84,7 @@ pip install numpy matplotlib
 ```
 Note: `tkinter` usually comes with Python
 
-## 🎮 Usage Examples
+## Usage Examples
 
 ### Algorithm Mode Output
 ```
